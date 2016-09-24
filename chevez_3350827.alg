@@ -34,14 +34,35 @@
 %qFourSolution := project title, branchName, authorFirst, authorLast, sequence (wBranchAuth);
 
 %QUERY #6 
-books := wrote njoin (project bookCode, title (book));
-temp(autNum, authorLast, authorFirst) := project authorNum, authorLast, authorFirst (author);
-booksAut1 := (project authorNum (author)) njoin books;
-temp1 := booksAut1 product temp;
-booksAut2 := select (authorNum = autNum) (temp1);
-wroteOne := project authorNum (booksAut1);
-temp2 := wroteOne njoin author;
-temp3 := project authorNum, authorLast, authorFirst, title (booksAut2);
-authorNumBookCode1 := project authorNum, bookCode (booksAut2);
-authorNumBookCode2(autN, bkC) := project authorNum, bookCode (booksAut2);
-temp4 := authorNumBookCode1 product authorNumBookCode2;
+%books := wrote njoin (project bookCode, title (book));
+%temp(autNum, authorLast, authorFirst) := project authorNum, authorLast, authorFirst (author);
+%booksAut1 := (project authorNum (author)) njoin books;
+%temp1 := booksAut1 product temp;
+%booksAut2 := select (authorNum = autNum) (temp1);
+%wrote1(n1, bc1) := project authorNum, bookCode (booksAut2);
+%wrote2(n2, bc2) := wrote1;
+%wTemp := wrote1 product wrote2;
+%ws1 := select (bc1 <> bc2)(wTemp);
+%ws2 := select (n1 = n2)(ws1);
+%ws3 := project n1 (ws2);
+
+%QUERY #7
+t1(bkC, brnchN, cpyN, qlt) := project bookCode, branchNum, copyNum, quality (copy);
+t2 := t1 product wrote;
+t3 := select (qlt = 'Excellent')(t2);
+t4 := select (qlt = 'Good')(t2);
+t5 := select (qlt = 'Fair')(t2);
+t6 := select (qlt = 'Poor')(t2);
+excll := project bkC (t3);
+gdd := project bkC (t4);
+frr := project bkC (t5);
+prr := project bkC(t6);
+common := (excll intersect gdd) intersect (frr intersect prr);
+
+
+
+
+
+
+
+
