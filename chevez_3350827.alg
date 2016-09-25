@@ -47,17 +47,31 @@
 %ws3 := project n1 (ws2);
 
 %QUERY #7
-t1(bkC, brnchN, cpyN, qlt) := project bookCode, branchNum, copyNum, quality (copy);
-t2 := t1 product wrote;
-t3 := select (qlt = 'Excellent')(t2);
-t4 := select (qlt = 'Good')(t2);
-t5 := select (qlt = 'Fair')(t2);
-t6 := select (qlt = 'Poor')(t2);
-excll := project bkC (t3);
-gdd := project bkC (t4);
-frr := project bkC (t5);
-prr := project bkC(t6);
-common := (excll intersect gdd) intersect (frr intersect prr);
+%t1(bkC, brnchN, cpyN, qlt) := project bookCode, branchNum, copyNum, quality (copy);
+%t2 := t1 product wrote;
+%t3 := select (qlt = 'Excellent')(t2);
+%t4 := select (qlt = 'Good')(t2);
+%t5 := select (qlt = 'Fair')(t2);
+%t6 := select (qlt = 'Poor')(t2);
+%excll := project bkC (t3);
+%gdd := project bkC (t4);
+%frr := project bkC (t5);
+%prr := project bkC(t6);
+%common := (excll intersect gdd) intersect (frr intersect prr);
+
+% QUERY # 8
+%dtBranch(brNum, brNam) := project branchNum, branchName (select (branchName = 'Henry Downtown') (branch));
+%dtBranchBooks := select (brNum = branchNum) (dtBranch product copy);
+
+%Query # 9
+%hbInv := project bookCode, branchNum, copyNum, price (inventory njoin copy);
+
+%Query #10
+pubs(pbC, pbN) := project publisherCode, publisherName (publisher);
+pubsBook := project pbN, bookCode, price (select (pbC = publisherCode) (pubs product book));
+copyCount := (project bookCode, branchNum, copyNum (copy)) njoin (pubsBook);
+t1 := project copyNum, pbN, price (copyCount);
+
 
 
 
