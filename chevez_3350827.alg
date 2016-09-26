@@ -1,13 +1,22 @@
+% Assignment #2 - WinRDBI
+% COP 4710 U)1 T/Thu 12:30-1:45 PM
+% Name: Hamilton Chevez
+% PID: 3350827
+% I hereby certify that this has been of my own work.
+
+
+
+
 %QUERY # 1
 %bookList := select (type='ART')(book);
 %bookWritten := wrote njoin bookList;
 %bookAuthor := bookWritten njoin author;
-%result := project bookCode, title, price, authorLast, authorFirst, sequence (bookAuthor);
+%qOneSolution := project bookCode, title, price, authorLast, authorFirst, sequence (bookAuthor);
 
 %QUERY #2
 %ficBooks := project bookCode (select (type = 'FIC')(book));
 %bookReferences := project authorNum (ficBooks njoin wrote);
-%ficAuthors := project authorLast, authorFirst (bookReferences njoin author);
+%qTwoSolution := project authorLast, authorFirst (bookReferences njoin author);
 
 %QUERY # 3
 %jp_Public(pC) := project publisherCode(select (publisherName = 'Jove Publications') (publisher));
@@ -15,14 +24,23 @@
 %temp := jp_Public product bookList;
 %jpBooks(bCode, pC) := project bookCode, pC (select (pC = publisherCode) (temp));
 %jpBookAuth := select (bookCode = bCode) (jpBooks product (project bookCode, authorNum (wrote)));
-%jpAuthors := author njoin (project authorNum (jpBookAuth));
+%qThreeSolution := author njoin (project authorNum (jpBookAuth));
 
 %QUERY # 4
 %inventF(bkCode, brNum) := project bookCode, branchNum (inventory);
 %temp1 := inventF product (project bookCode, authorNum (wrote));
 %notHenryBookC := select (bkCode <> bookCode) (temp1);
 %temp2 := notHenryBookC njoin author;
-%notHenryBookAuthors := project authorLast, authorFirst (temp2);
+%qFourSolution := project authorLast, authorFirst (temp2);
+
+
+
+%t1(hbBookCodes) := project bookCode (copy);
+%t2 := select (hbBookCodes = bookCode)(t1 product wrote);
+%t3(autN, authorLast, authorFirst) := author;
+%t4 := select (authorNum = autN)(t2 product t3);
+%t5 := project bookCode (inventory);
+
 
 %QUERY #5 %
 %goodBooks := project bookCode, branchNum ( select (quality = 'Good') (copy));
@@ -31,20 +49,20 @@
 %temp1 := project bookCode, title (book);
 %wBranchTitle := wroteBranch njoin temp1;
 %wBranchAuth := wBranchTitle njoin author;
-%qFourSolution := project title, branchName, authorFirst, authorLast, sequence (wBranchAuth);
+%qFiveSolution := project title, branchName, authorFirst, authorLast, sequence (wBranchAuth);
 
 %QUERY #6 
 %books := wrote njoin (project bookCode, title (book));
 %temp(autNum, authorLast, authorFirst) := project authorNum, authorLast, authorFirst (author);
 %booksAut1 := (project authorNum (author)) njoin books;
 %temp1 := booksAut1 product temp;
-%booksAut2 := select (authorNum = autNum) (temp1);
+%booksAut2 := select (authorNum = autNum) (booksAut1 product temp);
 %wrote1(n1, bc1) := project authorNum, bookCode (booksAut2);
 %wrote2(n2, bc2) := wrote1;
 %wTemp := wrote1 product wrote2;
 %ws1 := select (bc1 <> bc2)(wTemp);
 %ws2 := select (n1 = n2)(ws1);
-%ws3 := project n1 (ws2);
+%qSixResult := project n1 (ws2);
 
 %QUERY #7
 %t1(bkC, brnchN, cpyN, qlt) := project bookCode, branchNum, copyNum, quality (copy);
@@ -57,20 +75,10 @@
 %gdd := project bkC (t4);
 %frr := project bkC (t5);
 %prr := project bkC(t6);
-%common := (excll intersect gdd) intersect (frr intersect prr);
+%qSevenSolution := (excll intersect gdd) intersect (frr intersect prr);
 
-% QUERY # 8
-%dtBranch(brNum, brNam) := project branchNum, branchName (select (branchName = 'Henry Downtown') (branch));
-%dtBranchBooks := select (brNum = branchNum) (dtBranch product copy);
 
-%Query # 9
-%hbInv := project bookCode, branchNum, copyNum, price (inventory njoin copy);
 
-%Query #10
-pubs(pbC, pbN) := project publisherCode, publisherName (publisher);
-pubsBook := project pbN, bookCode, price (select (pbC = publisherCode) (pubs product book));
-copyCount := (project bookCode, branchNum, copyNum (copy)) njoin (pubsBook);
-t1 := project copyNum, pbN, price (copyCount);
 
 
 
