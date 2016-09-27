@@ -1,9 +1,9 @@
 % Assignment #2 - WinRDBI
 % COP 4710 U)1 T/Thu 12:30-1:45 PM
 % Name: Hamilton Chevez
+% DUE DATE: Sept 27, 2016
 % PID: 3350827
 % I hereby certify that this has been of my own work.
-
 
 
 
@@ -35,9 +35,6 @@ selAuthors := select (authorNum = autN)(henryBookC product authorDup);
 hbAuthors := project authorLast, authorFirst (selAuthors);
 authorList(authorLast, authorFirst) := project authorLast, authorFirst (authorDup);
 qFourSolution := authorList difference hbAuthors;
-
-
-
 
 
 %QUERY #5 %
@@ -74,3 +71,15 @@ gdd := project bkC (t4);
 frr := project bkC (t5);
 prr := project bkC(t6);
 qSevenSolution := (excll intersect gdd) intersect (frr intersect prr);
+
+
+
+
+
+
+
+
+
+
+
+
